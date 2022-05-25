@@ -48,8 +48,8 @@ app.use(async (ctx) => {
   }
 });
 
-//서버 오픈 - PORT가 지정되어 있지 않으면 4001 사용
+//서버 오픈
 const port = PORT || 4000;
 app.listen(port, () => {
-  console.log('서버 오픈 %d번', port);
+  console.log('%d번 서버 오픈', port);
 });

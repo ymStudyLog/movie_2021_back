@@ -18,7 +18,6 @@ import jwtMiddleware from './lib/jwtMiddleware';
 const { PORT, MONGO_URI } = process.env;
 mongoose
   .connect(MONGO_URI, {
-    dbName:'movie_user',
     ignoreUndefined: true, 
     useNewUrlParser: true, 
     useFindAndModify: false, 

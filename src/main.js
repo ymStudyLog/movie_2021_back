@@ -17,9 +17,14 @@ import jwtMiddleware from './lib/jwtMiddleware';
 //환경변수로 MongoDB와 연결
 const { PORT, MONGO_URI } = process.env;
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
+  .connect(MONGO_URI, {
+    dbName:'movie_user',
+    ignoreUndefined: true, 
+    useNewUrlParser: true, 
+    useFindAndModify: false, 
+  })
   .then(() => {
-    console.log('MongoDB 연결성공');
+    console.log('MongoDB 연결 성공');
   })
   .catch((e) => {
     console.log(e);
@@ -51,5 +56,5 @@ app.use(async (ctx) => {
 //서버 오픈
 const port = PORT || 4000;
 app.listen(port, () => {
-  console.log('%d번 서버 오픈', port);
+  console.log('%d번 서버 오픈 성공', port);
 });

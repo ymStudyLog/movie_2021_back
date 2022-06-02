@@ -116,9 +116,6 @@ export const logout = async (ctx) => {
  * POST /api/auth/modify 
  */
 export const modify = async (ctx) => {
-  //Get an username from token
-  const { username } = ctx.state.user;
-  
   //Verify a new password form 
   const passSchema = Joi.object().keys({
     password: Joi.string().required(),
@@ -132,6 +129,8 @@ export const modify = async (ctx) => {
   const { password } = ctx.request.body;
   
   try{
+    //Get an username from token
+    const { username } = ctx.state.user;
     const user = await User.findByUsername(username);
     user.hashedPassword = ''; //delete the previous password first(just in case)
     await user.setPassword(password);
@@ -164,7 +163,6 @@ export const withdrawal = async (ctx) => {
     await user.deleteOne();
     ctx.cookies.set('access_token');
     ctx.status = 204; //No content
-    console.log('Successfully withdrew');
   } catch(e) {
     ctx.throw(500, e);
   }

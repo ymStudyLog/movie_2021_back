@@ -110,3 +110,62 @@ export const logout = async (ctx) => {
   ctx.cookies.set('access_token');
   ctx.status = 204; //No content
 };
+
+/*
+ * 비밀번호 변경 
+ * POST /api/auth/modify 
+ */
+export const modify = async (ctx) => {
+  //Get an username from token
+  const { username } = ctx.state.user;
+  
+  //Verify a new password form 
+  const passSchema = Joi.object().keys({
+    password: Joi.string().required(),
+  });
+  const result = passSchema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+  const { password } = ctx.request.body;
+  
+  try{
+    const user = await User.findByUsername(username);
+    user.hashedPassword = ''; //delete the previous password first(just in case)
+    await user.setPassword(password);
+    await user.save();
+
+    ctx.body = user.serialize();
+
+    //Generate a new token
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, //7일
+      httpOnly: true,
+    });
+  } catch(e) {
+    ctx.throw(500, e);
+  }
+};
+
+/*
+ * 회원 탈퇴
+ * POST /api/auth/withdrawal
+ * Document.prototype.deleteOne() 
+ */
+export const withdrawal = async (ctx) => {
+  //Get an username from token
+  const { username } = ctx.state.user;
+
+  try{
+    const user = await User.findByUsername(username);
+    await user.deleteOne();
+    ctx.cookies.set('access_token');
+    ctx.status = 204; //No content
+    console.log('Successfully withdrew');
+  } catch(e) {
+    ctx.throw(500, e);
+  }
+};

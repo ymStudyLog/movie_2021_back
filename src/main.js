@@ -23,7 +23,7 @@ mongoose
     useFindAndModify: false, 
   })
   .then(() => {
-    console.log('MongoDB 연결 성공');
+    console.log('Connected to MongoDB');
   })
   .catch((e) => {
     console.log(e);
@@ -52,8 +52,8 @@ app.use(async (ctx) => {
   }
 });
 
-//서버 오픈
+//server open - do not use korean message in `console.log` or `comments`. ubuntu cannot translate it.
 const port = PORT || 4000;
 app.listen(port, () => {
-  console.log('%d번 서버 오픈 성공', port);
+  console.log('Listening to port No.%d', port);
 });

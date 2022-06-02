@@ -7,6 +7,7 @@ const jwtMiddleware = async (ctx, next) => {
     if(!token) return next(); //토큰이 없음
     try{
         const decoded = jwt.verify(token, process.env.JWT_KEY);
+        //토큰 검증 결과 담기
         ctx.state.user = {
             _id:decoded._id,
             username:decoded.username,
@@ -25,7 +26,7 @@ const jwtMiddleware = async (ctx, next) => {
         return next();
     } catch(e) {
         //토큰 검증 실패
-        console.log('토큰 검증 실패');
+        console.log('Failed to verify token');
         return next();
     }
 };

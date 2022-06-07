@@ -128,9 +128,9 @@ export const modify = async (ctx) => {
   }
   const { password } = ctx.request.body;
   
+  //Get an username from token
+  const { username } = ctx.state.user;
   try{
-    //Get an username from token
-    const { username } = ctx.state.user;
     const user = await User.findByUsername(username);
     user.hashedPassword = ''; //delete the previous password first(just in case)
     await user.setPassword(password);
